@@ -1,0 +1,434 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#100d18">
+  <title>DollyFans | Your World, Your Creators</title>
+  <meta name="description" content="Discover creators, explore exclusive content, and connect with your favorite people on DollyFans.">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #100d18;
+      --panel: #1b1625;
+      --purple: #a855f7;
+      --pink: #f472b6;
+      --text: #fff;
+      --muted: #b9b1c7;
+    }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.5;
+    }
+    a { color: inherit; text-decoration: none; }
+    button, input { font: inherit; }
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 18px 6%;
+      border-bottom: 1px solid #30263d;
+      background: #100d18;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .logo {
+      font-size: 25px;
+      font-weight: 900;
+      letter-spacing: -1px;
+    }
+    .logo span { color: var(--pink); }
+    nav { display: flex; align-items: center; gap: 20px; }
+    nav a { color: var(--muted); font-size: 14px; }
+    nav a:hover { color: white; }
+    .btn {
+      display: inline-block;
+      border: 0;
+      border-radius: 25px;
+      padding: 11px 19px;
+      background: linear-gradient(100deg, var(--purple), var(--pink));
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .btn.secondary {
+      background: transparent;
+      border: 1px solid #5b476c;
+    }
+    .hero {
+      padding: 75px 6% 60px;
+      text-align: center;
+      background: radial-gradient(ellipse at top, #38204d, var(--bg) 70%);
+    }
+    .eyebrow {
+      color: #e9b6ff;
+      font-size: 12px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    h1 {
+      max-width: 760px;
+      margin: 18px auto;
+      font-size: clamp(38px, 7vw, 66px);
+      line-height: 1.08;
+      letter-spacing: -2px;
+    }
+    h1 span {
+      background: linear-gradient(90deg, var(--purple), var(--pink));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .hero p {
+      max-width: 570px;
+      margin: 0 auto 25px;
+      color: var(--muted);
+      font-size: 16px;
+    }
+    .hero-actions {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .search-wrap { max-width: 480px; margin: 32px auto 0; }
+    .search-wrap input {
+      width: 100%;
+      padding: 15px 20px;
+      border: 1px solid #493654;
+      border-radius: 30px;
+      background: #1b1625;
+      color: white;
+      outline: none;
+    }
+    .section { padding: 35px 6% 55px; }
+    .section-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+    h2 { font-size: 25px; }
+    .section-heading p { color: var(--muted); font-size: 13px; }
+    .categories {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding: 2px 0 18px;
+    }
+    .category {
+      flex-shrink: 0;
+      border: 1px solid #45344f;
+      background: var(--panel);
+      color: white;
+      padding: 9px 17px;
+      border-radius: 25px;
+      cursor: pointer;
+    }
+    .category.active, .category:hover {
+      background: #66359a;
+      border-color: #a855f7;
+    }
+    .creator-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+    }
+    .creator {
+      overflow: hidden;
+      border: 1px solid #30263d;
+      border-radius: 18px;
+      background: var(--panel);
+      transition: transform .2s;
+    }
+    .creator:hover { transform: translateY(-4px); }
+    .creator-art {
+      height: 180px;
+      display: grid;
+      place-items: center;
+      font-size: 64px;
+      background: linear-gradient(135deg, #59317a, #25182f);
+    }
+    .creator:nth-child(2) .creator-art {
+      background: linear-gradient(135deg, #743d65, #28192f);
+    }
+    .creator:nth-child(3) .creator-art {
+      background: linear-gradient(135deg, #3b477f, #1d1932);
+    }
+    .creator:nth-child(4) .creator-art {
+      background: linear-gradient(135deg, #9c4f68, #351a38);
+    }
+    .creator:nth-child(5) .creator-art {
+      background: linear-gradient(135deg, #2f777a, #19263a);
+    }
+    .creator:nth-child(6) .creator-art {
+      background: linear-gradient(135deg, #79502e, #2c1c30);
+    }
+    .creator-info { padding: 16px; }
+    .creator-info h3 { font-size: 17px; }
+    .handle { color: var(--muted); font-size: 13px; }
+    .creator-info p {
+      margin: 10px 0 14px;
+      color: #d2c9dd;
+      font-size: 13px;
+    }
+    .creator-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .tag { color: #e7b5ff; font-size: 12px; }
+    .small-btn {
+      padding: 8px 13px;
+      font-size: 12px;
+    }
+    .empty {
+      display: none;
+      padding: 30px;
+      text-align: center;
+      color: var(--muted);
+    }
+    .join {
+      margin: 0 6% 60px;
+      padding: 42px 20px;
+      border: 1px solid #4d3264;
+      border-radius: 24px;
+      text-align: center;
+      background: linear-gradient(120deg, #291a3b, #281629);
+    }
+    .join p {
+      max-width: 480px;
+      margin: 12px auto 22px;
+      color: var(--muted);
+    }
+    footer {
+      border-top: 1px solid #30263d;
+      padding: 28px 6%;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 15px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    footer a { margin-right: 14px; }
+    @media (max-width: 700px) {
+      header { padding: 15px 4%; }
+      nav { gap: 11px; }
+      nav a { font-size: 12px; }
+      .logo { font-size: 21px; }
+      header .btn { padding: 9px 12px; font-size: 12px; }
+      .hero { padding: 60px 5% 45px; }
+      .section { padding: 28px 5% 40px; }
+      .creator-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+      .creator-art { height: 130px; font-size: 48px; }
+      .creator-info { padding: 12px; }
+      h2 { font-size: 21px; }
+      .join { margin: 0 5% 40px; }
+    }
+    @media (max-width: 360px) {
+      nav a:first-child { display: none; }
+      .creator-grid { grid-template-columns: 1fr; }
+      .creator-art { height: 170px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a class="logo" href="#">Dolly<span>Fans</span></a>
+    <nav>
+      <a href="#discover">Discover</a>
+      <a href="#creators">Creators</a>
+      <a href="#join">About</a>
+    </nav>
+    <a class="btn" href="#join">Join Us</a>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="eyebrow">Your creativity. Your community.</div>
+      <h1>Your world.<br><span>Your favorite creators.</span></h1>
+      <p>Discover amazing creators, explore their work, and find a community that shares your interests. A new home for creativity starts here.</p>
+      <div class="hero-actions">
+        <a class="btn" href="#creators">Explore Creators</a>
+        <a class="btn secondary" href="#join">Become a Creator</a>
+      </div>
+      <div class="search-wrap">
+        <input id="search" type="search" placeholder="Search creators or interests..." aria-label="Search creators">
+      </div>
+    </section>
+
+    <section class="section" id="discover">
+      <div class="section-heading">
+        <div>
+          <h2>Discover your community</h2>
+          <p>Find creators and content you love.</p>
+        </div>
+      </div>
+      <div class="categories">
+        <button class="category active" data-filter="all">All creators</button>
+        <button class="category" data-filter="art">Art & Design</button>
+        <button class="category" data-filter="fitness">Fitness</button>
+        <button class="category" data-filter="music">Music</button>
+        <button class="category" data-filter="lifestyle">Lifestyle</button>
+      </div>
+    </section>
+
+    <section class="section" id="creators">
+      <div class="section-heading">
+        <div>
+          <h2>Featured creators</h2>
+          <p>Meet the people behind the creativity.</p>
+        </div>
+      </div>
+
+      <div class="creator-grid" id="creatorGrid">
+        <article class="creator" data-category="art" data-search="maya art design illustration">
+          <div class="creator-art">🎨</div>
+          <div class="creator-info">
+            <h3>Maya Creates</h3>
+            <div class="handle">@mayacreates</div>
+            <p>Digital art, illustrations and creative inspiration.</p>
+            <div class="creator-bottom">
+              <span class="tag">Art & Design</span>
+              <button class="btn small-btn profile-btn">View profile</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="creator" data-category="fitness" data-search="alex fit fitness wellness training">
+          <div class="creator-art">💪</div>
+          <div class="creator-info">
+            <h3>Alex Fit</h3>
+            <div class="handle">@alexfit</div>
+            <p>Workouts, wellness tips and motivation.</p>
+            <div class="creator-bottom">
+              <span class="tag">Fitness</span>
+              <button class="btn small-btn profile-btn">View profile</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="creator" data-category="music" data-search="jay music singer producer">
+          <div class="creator-art">🎵</div>
+          <div class="creator-info">
+            <h3>Jay Sounds</h3>
+            <div class="handle">@jaysounds</div>
+            <p>Music, studio sessions and original sounds.</p>
+            <div class="creator-bottom">
+              <span class="tag">Music</span>
+              <button class="btn small-btn profile-btn">View profile</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="creator" data-category="lifestyle" data-search="nia lifestyle fashion travel">
+          <div class="creator-art">✨</div>
+          <div class="creator-info">
+            <h3>Nia Living</h3>
+            <div class="handle">@nialiving</div>
+            <p>Fashion, everyday life and travel inspiration.</p>
+            <div class="creator-bottom">
+              <span class="tag">Lifestyle</span>
+              <button class="btn small-btn profile-btn">View profile</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="creator" data-category="art" data-search="sam photography art portraits">
+          <div class="creator-art">📸</div>
+          <div class="creator-info">
+            <h3>Sam Frames</h3>
+            <div class="handle">@samframes</div>
+            <p>Photography, portraits and visual stories.</p>
+            <div class="creator-bottom">
+              <span class="tag">Art & Design</span>
+              <button class="btn small-btn profile-btn">View profile</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="creator" data-category="music" data-search="lee music beats creative">
+          <div class="creator-art">🎧</div>
+          <div class="creator-info">
+            <h3>Lee Beats</h3>
+            <div class="handle">@leebeats</div>
+            <p>Fresh beats, music ideas and behind the scenes.</p>
+            <div class="creator-bottom">
+              <span class="tag">Music</span>
+              <button class="btn small-btn profile-btn">View profile</button>
+            </div>
+          </div>
+        </article>
+      </div>
+      <div class="empty" id="empty">No creators found. Try another search.</div>
+    </section>
+
+    <section class="join" id="join">
+      <div class="eyebrow">Your next chapter starts here</div>
+      <h2>Are you ready to create?</h2>
+      <p>Share your talent, grow your audience and bring your community together. DollyFans is being built with creators in mind.</p>
+      <a class="btn" href="mailto:hello@dollyfans.example?subject=Creator%20interest">I'm interested</a>
+      <p style="font-size:12px">Demo homepage — creator registration is coming soon.</p>
+    </section>
+  </main>
+
+  <footer>
+    <a class="logo" href="#">Dolly<span>Fans</span></a>
+    <div>© <span id="year"></span> DollyFans. All rights reserved.</div>
+    <div><a href="#join">About</a><a href="#join">Contact</a></div>
+  </footer>
+
+  <script>
+    const cards = [...document.querySelectorAll(".creator")];
+    const search = document.getElementById("search");
+    const empty = document.getElementById("empty");
+    let category = "all";
+
+    function filterCreators() {
+      const term = search.value.toLowerCase().trim();
+      let shown = 0;
+      cards.forEach(card => {
+        const matchesCategory =
+          category === "all" || card.dataset.category === category;
+        const matchesSearch =
+          card.dataset.search.includes(term) ||
+          card.innerText.toLowerCase().includes(term);
+        const visible = matchesCategory && matchesSearch;
+        card.style.display = visible ? "" : "none";
+        if (visible) shown++;
+      });
+      empty.style.display = shown ? "none" : "block";
+    }
+
+    search.addEventListener("input", filterCreators);
+
+    document.querySelectorAll(".category").forEach(button => {
+      button.addEventListener("click", () => {
+        category = button.dataset.filter;
+        document.querySelectorAll(".category").forEach(item =>
+          item.classList.toggle("active", item === button)
+        );
+        filterCreators();
+      });
+    });
+
+    document.querySelectorAll(".profile-btn").forEach(button => {
+      button.addEventListener("click", () => {
+        alert("Creator profiles are coming soon to DollyFans!");
+      });
+    });
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+  </html>
+  
